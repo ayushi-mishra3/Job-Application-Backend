@@ -1,4 +1,3 @@
-
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -24,7 +23,8 @@ const corsOptions = {
     origin: [
         "http://localhost:5173",
         "http://localhost:5174",
-        "https://job-application-frontend-nu.vercel.app"
+        "https://job-application-frontend-nu.vercel.app",
+        "https://job-application-frontend-gj9xef3k3-ayushi-mishra.vercel.app"
     ],
     credentials: true
 };

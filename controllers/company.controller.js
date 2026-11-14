@@ -78,33 +78,54 @@ export const getCompanyById = async(req,res) =>{
 }
 
 
-export const updateCompany = async(req , res)=>{
-    try{
-        const{name , description , website , location} = req.body
-        const file = req.file
-        //cloudinary aayega
 
-        const fileUri = getDataUri(file)
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content)
-        const logo = cloudResponse.secure_url
-        const updateData = {name , description , website , location , logo}
+export const updateCompany = async (req, res) => {
+    try {
+        const { name, description, website, location } = req.body;
 
+        const updateData = {
+            name,
+            description,
+            website,
+            location
+        };
 
-        const company = await Company.findByIdAndUpdate(req.params.id , updateData , {new : true})
+        // Upload logo only if a new file is provided
+        if (req.file) {
+            const fileUri = getDataUri(req.file);
 
-        if(!company){
+            const cloudResponse = await cloudinary.uploader.upload(
+                fileUri.content
+            );
+
+            updateData.logo = cloudResponse.secure_url;
+        }
+
+        const company = await Company.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            {  returnDocument: 'after' , runValidators: true }
+        );
+
+        if (!company) {
             return res.status(404).json({
-                message : "Company Not Found",
-                success : false
-            })
+                message: "Company Not Found",
+                success: false
+            });
         }
 
         return res.status(200).json({
-                company,
-                success : true
-        })
-    }catch(err){
-        console.log(err);
-    }
-}
+            message: "Company updated successfully",
+            company,
+            success: true
+        });
 
+    } catch (err) {
+        console.error("Update Company Error:", err);
+
+        return res.status(500).json({
+            message: "Internal Server Error",
+            success: false
+        });
+    }
+};
