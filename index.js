@@ -17,9 +17,14 @@ app.use(express.urlencoded({extended:true}))        //The middleware intercepts 
 app.use(cookieParser())
 
 const corsOptions = {
-    origin: 'http://localhost:5173', //only this frontend(origin) can access my backend data . Other frontend can also ask for data but the backened will reject it.
+    origin: [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://job-application-frontend-nu.vercel.app/"
+    ],
     credentials: true
-}
+};
+
 app.use(cors(corsOptions))
 
 const PORT = process.env.PORT || 2000
