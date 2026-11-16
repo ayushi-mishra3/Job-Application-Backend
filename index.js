@@ -31,12 +31,26 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Backend health check
+// Health check
 app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
         message: "Job Application Backend is running successfully!"
     });
+});
+
+// Connect to MongoDB before handling API requests
+app.use(async (req, res, next) => {
+    try {
+        await connectDb();
+        next();
+    } catch (error) {
+        console.error("Database connection failed:", error);
+        res.status(500).json({
+            success: false,
+            message: "Database connection failed"
+        });
+    }
 });
 
 // API Routes
@@ -45,10 +59,14 @@ app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 
-// Start Server
-const PORT = process.env.PORT || 2000;
+// Local development only
+if (!process.env.VERCEL) {
+    const PORT = process.env.PORT || 2000;
 
-app.listen(PORT, async () => {
-    await connectDb();
-    console.log(`Server running at port ${PORT}`);
-});
+    app.listen(PORT, () => {
+        console.log(`Server running at port ${PORT}`);
+    });
+}
+
+// Export Express app for Vercel
+export default app;

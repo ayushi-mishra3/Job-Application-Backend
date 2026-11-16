@@ -1,12 +1,25 @@
-import express from "express"
-import isAuthenticated from "../middlewares/isAuthenticated.js"
-import { getAdminJobs, getAllJobs, getJobById, postJob } from "../controllers/job.controller.js"
+import express from "express";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
 
-const router = express.Router()
+import {
+    getAdminJobs,
+    getAllJobs,
+    getJobById,
+    postJob,
+    updateJob
+} from "../controllers/job.controller.js";
 
-router.route("/post").post(isAuthenticated , postJob)
-router.route("/get").get(  getAllJobs)
-router.route("/getadminjobs").get(isAuthenticated , getAdminJobs)
-router.route("/get/:id").get( getJobById)
- 
-export default router
+const router = express.Router();
+
+router.route("/post").post(isAuthenticated, postJob);
+
+router.route("/get").get(getAllJobs);
+
+router.route("/getadminjobs").get(isAuthenticated, getAdminJobs);
+
+router.route("/get/:id").get(getJobById);
+
+// Update existing job
+router.route("/update/:id").put(isAuthenticated, updateJob);
+
+export default router;
