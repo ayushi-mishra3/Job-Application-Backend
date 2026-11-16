@@ -24,7 +24,8 @@ const corsOptions = {
         "http://localhost:5173",
         "http://localhost:5174",
         "https://job-application-frontend-nu.vercel.app",
-        "https://job-application-frontend-gj9xef3k3-ayushi-mishra.vercel.app"
+        "https://job-application-frontend-gj9xef3k3-ayushi-mishra.vercel.app",
+        "https://job-application-frontend-swart.vercel.app"
     ],
     credentials: true
 };
